@@ -5,18 +5,18 @@ const InfoSections: React.FC = () => {
   const features = [
     {
       icon: <Palette className="w-8 h-8 text-[#65a30d]" />,
-      title: "Master My Makeup",
-      description: "No more guessing. Learn the exact angles, liners, and shadows that make my specific eye shape pop."
+      title: "Master Your Makeup",
+      description: "Learn the exact angles and techniques to make your specific eye shape pop."
     },
     {
       icon: <Glasses className="w-8 h-8 text-[#65a30d]" />,
-      title: "Find My Perfect Frames",
-      description: "Discover which glasses balance my brow bone and highlight my best features."
+      title: "Find Your Frames",
+      description: "Discover glasses that balance your brow bone and highlight your best features."
     },
     {
       icon: <Heart className="w-8 h-8 text-[#65a30d]" />,
-      title: "Boost My Confidence",
-      description: "Beauty isn't one-size-fits-all. Embrace my unique architectural blueprint with styling tips designed just for me."
+      title: "Boost Confidence",
+      description: "Embrace your unique look with architectural styling tips designed just for you."
     }
   ];
 
@@ -30,10 +30,10 @@ const InfoSections: React.FC = () => {
       <section className="py-24 px-4 bg-white border-t border-gray-100">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <h2 className="text-4xl md:text-5xl font-bold text-[#333333] tracking-tight">
-            Ready To Define My Look?
+            Ready To Find Your Eye Shape?
           </h2>
           <p className="text-xl text-[#555555] leading-relaxed max-w-2xl mx-auto">
-             Stop guessing. Use AI to analyze my facial landmarks and identify my exact eye shape in seconds.
+             Stop guessing. Instantly identify your eye shape in seconds with AI.
           </p>
           <button 
             onClick={scrollToTop}
@@ -49,10 +49,10 @@ const InfoSections: React.FC = () => {
       <section className="py-24 px-4 max-w-7xl mx-auto bg-[#f9f9f9]">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-[#333333] mb-4">
-            Why Does This Matter?
+            Why It Matters
           </h2>
           <p className="text-[#555555] max-w-xl mx-auto">
-            Knowing my eye shape is the key to unlocking my personal style potential.
+            Your eye shape is the blueprint for your style. Unlock personalized makeup and eyewear potential.
           </p>
         </div>
 

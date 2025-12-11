@@ -20,11 +20,11 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) =
                 <div className="bg-white rounded-[24px] shadow-xl shadow-black/5 border border-gray-100 overflow-hidden p-5 flex flex-col items-center text-center relative z-10">
                     
                     {/* User Image Container */}
-                    <div className="relative w-full aspect-square rounded-[20px] overflow-hidden mb-5 bg-gray-50 border border-gray-100 shadow-inner group">
+                    <div className="relative w-full max-w-[240px] aspect-square rounded-[20px] overflow-hidden mb-5 bg-gray-50 border border-gray-100 shadow-inner group mx-auto">
                          {userImage ? (
                             <img 
                                 src={userImage} 
-                                alt="Analyzed Eye" 
+                                alt={`User's eye analyzed as ${result.shape} shape`}
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                             />
                          ) : (
@@ -43,11 +43,11 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) =
                     {/* Result Header */}
                     <div className="mb-2 w-full">
                         <div className="inline-block px-3 py-1 rounded-full bg-[#65a30d]/10 text-[#65a30d] text-xs font-bold tracking-wider uppercase mb-3">
-                            My Analysis
+                            Analysis Result
                         </div>
-                        <h3 className="text-2xl font-extrabold text-[#333333] leading-tight mb-4">
+                        <h2 className="text-2xl font-extrabold text-[#333333] leading-tight mb-4">
                             {result.shape} Eyes
-                        </h3>
+                        </h2>
                     </div>
 
                     {/* Progress Bar Section - Green Gradient */}
@@ -88,7 +88,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) =
                         <div className="w-10 h-10 bg-[#65a30d]/10 rounded-[12px] flex items-center justify-center text-[#65a30d]">
                             <Info size={22} />
                         </div>
-                        <h4 className="text-xl font-bold text-[#333333]">Why This Shape?</h4>
+                        <h3 className="text-xl font-bold text-[#333333]">Why This Shape?</h3>
                      </div>
                      <p className="text-[#555555] text-lg leading-relaxed">
                         {result.description}
@@ -101,7 +101,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) =
                         <div className="w-10 h-10 bg-[#65a30d]/10 rounded-[12px] flex items-center justify-center text-[#65a30d]">
                             <CheckCircle2 size={22} />
                         </div>
-                        <h4 className="text-xl font-bold text-[#333333]">Key Features</h4>
+                        <h3 className="text-xl font-bold text-[#333333]">Key Features</h3>
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
                         {result.features.map((feature, idx) => (
@@ -119,7 +119,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) =
                         <div className="w-10 h-10 bg-[#65a30d]/10 rounded-[12px] flex items-center justify-center text-[#65a30d]">
                             <Glasses size={22} />
                         </div>
-                        <h4 className="text-xl font-bold text-[#333333]">Recommended Frames</h4>
+                        <h3 className="text-xl font-bold text-[#333333]">Recommended Frames</h3>
                     </div>
                     <div className="grid sm:grid-cols-3 gap-4">
                         {result.eyewearRecommendations?.map((rec, idx) => (
@@ -142,7 +142,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) =
                             <div className="w-10 h-10 bg-white/20 rounded-[12px] backdrop-blur-sm flex items-center justify-center">
                                 <Star size={22} className="fill-white text-white" />
                             </div>
-                            <h4 className="text-xl font-bold">Styling Strategy</h4>
+                            <h3 className="text-xl font-bold">Styling Strategy</h3>
                         </div>
                         <div className="space-y-6">
                             {result.makeupTips.map((tip, idx) => (

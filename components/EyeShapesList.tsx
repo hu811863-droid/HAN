@@ -215,10 +215,10 @@ const EyeShapesList: React.FC = () => {
     <section id="shapes" className="py-20 px-4 max-w-7xl mx-auto">
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-5xl font-bold text-[#333333] tracking-tight mb-4">
-          Which One Am I?
+          Eye Shape Library: Which One Am I?
         </h2>
         <p className="text-[#555555] text-lg max-w-2xl mx-auto">
-          Explore the library. Find the traits that define my unique look.
+          Explore the traits that define different eye shapes. Find your unique look.
         </p>
       </div>
 

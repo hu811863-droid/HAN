@@ -178,13 +178,14 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
         ) : (
           /* Standard Upload UI */
           <>
-            {/* Title: White */}
+            {/* Title: Keyword Rich for SEO */}
             <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-sm relative z-10 tracking-tight leading-tight">
-              What Is My Eye Shape?
+              AI Eye Shape Finder
+              <span className="block text-2xl md:text-4xl mt-2 font-bold text-white/90">What Is My Eye Shape?</span>
             </h1>
-            {/* Subtitle: White/90 */}
+            {/* Subtitle: Value Prop - Concise & Direct */}
             <p className="text-white/90 text-lg md:text-xl mb-10 max-w-2xl mx-auto relative z-10 font-medium leading-relaxed">
-              Upload a clear photo or selfie to get my accurate eye shape instantly.
+              Instantly identify your eye shape with AI. Get personalized makeup tips & eyewear recommendations.
             </p>
 
             {/* Input Container - Unified White Box */}
@@ -202,7 +203,7 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
                 
                 <div className="flex flex-col items-start overflow-hidden">
                   <span className="font-bold truncate w-full text-left text-lg text-[#333333]">
-                    {selectedFile ? selectedFile.name : "Upload My Selfie..."}
+                    {selectedFile ? selectedFile.name : "Upload photo..."}
                   </span>
                   <span className="text-sm text-gray-400 font-medium">
                     {selectedFile ? "Ready to analyze" : "JPG, PNG supported"}
@@ -233,7 +234,7 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
                     ) : (
                     <>
                         <ScanLine className="w-5 h-5" /> 
-                        Scan
+                        Analyze
                     </>
                     )}
                 </button>
@@ -253,11 +254,11 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
           </>
         )}
 
-        {/* Privacy Note - White/70 */}
+        {/* Privacy Note - White/70 - Concise */}
         {!isCameraOpen && (
           <div className="mt-6 flex items-center justify-center gap-2 text-white/70 text-sm font-medium relative z-10 animate-fade-in">
             <ShieldCheck size={16} />
-            <span>Your photos are never stored and are deleted immediately after analysis.</span>
+            <span>100% Private. Photos are never stored.</span>
           </div>
         )}
 
@@ -267,7 +268,7 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
             <div className="inline-block p-2 bg-white rounded-[24px] border border-gray-100 shadow-md">
                 <img 
                 src={previewUrl} 
-                alt="Preview" 
+                alt="Eye shape analysis preview" 
                 className="h-40 w-40 object-cover rounded-[20px]" 
                 />
             </div>

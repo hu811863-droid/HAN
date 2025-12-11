@@ -1,6 +1,6 @@
 {
   "name": "Eye-Shape-AI",
-  "description": "Instantly identify my eye shape with AI. Get personalized makeup and eyewear tips for Almond, Round, Hooded eyes, and more.",
+  "description": "What is my eye shape? Take our free, instant AI Eye Shape Test. Accurate analysis for Hooded, Almond, Round, Monolid, Upturned & Downturned eyes.",
   "requestFramePermissions": [
     "camera"
   ]
