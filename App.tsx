@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import ResultCard from './components/ResultCard';
@@ -11,6 +11,29 @@ function App() {
   const [analysisResult, setAnalysisResult] = useState<EyeAnalysisResult | null>(null);
   const [userImage, setUserImage] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<ViewState>('home');
+
+  // Handle Shared Results on Mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const shareId = params.get('share');
+
+    if (shareId) {
+      try {
+        const storedData = localStorage.getItem(`eyeshape_share_${shareId}`);
+        if (storedData) {
+          const parsed = JSON.parse(storedData);
+          if (parsed && parsed.result) {
+            setAnalysisResult(parsed.result);
+            // Note: Images are not stored in localStorage to avoid quota limits
+            setUserImage(null);
+            setCurrentView('result');
+          }
+        }
+      } catch (e) {
+        console.error("Error loading shared result:", e);
+      }
+    }
+  }, []);
 
   const handleAnalysisComplete = (result: EyeAnalysisResult | null, image?: string | null) => {
     if (result) {
@@ -29,6 +52,10 @@ function App() {
     setAnalysisResult(null);
     setUserImage(null);
     setCurrentView('home');
+    // Clear share param if present
+    if (window.location.search.includes('share=')) {
+        window.history.pushState({}, '', window.location.pathname);
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

@@ -28,8 +28,9 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) =
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                             />
                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-300 bg-gray-50">
+                            <div className="w-full h-full flex items-center justify-center text-gray-300 bg-gray-50 flex-col gap-2">
                                 <Sparkles size={48} className="opacity-50" />
+                                <span className="text-xs font-medium text-gray-400">Image not saved</span>
                             </div>
                          )}
                          {/* Optional Badge - Green */}
@@ -63,14 +64,18 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) =
                         </div>
                     </div>
 
-                    {/* Primary Action - Green Button */}
-                    <button 
-                        onClick={onReset}
-                        className="w-full py-3.5 px-6 bg-[#65a30d] hover:bg-[#4d7c0f] text-white rounded-[16px] font-semibold text-base shadow-lg shadow-[#65a30d]/25 transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2"
-                    >
-                        <RefreshCw size={18} />
-                        Scan Another Photo
-                    </button>
+                    {/* Actions Stack */}
+                    <div className="w-full space-y-3">
+                        {/* Primary Action - Green Button */}
+                        <button 
+                            onClick={onReset}
+                            className="w-full py-3.5 px-6 bg-[#65a30d] hover:bg-[#4d7c0f] text-white rounded-[16px] font-semibold text-base shadow-lg shadow-[#65a30d]/25 transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2"
+                        >
+                            <RefreshCw size={18} />
+                            Scan Another
+                        </button>
+                    </div>
+
                 </div>
             </div>
 

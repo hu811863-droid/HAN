@@ -187,16 +187,16 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
               Upload a clear photo or selfie to get my accurate eye shape instantly.
             </p>
 
-            {/* Input Container - Darker semi-transparent green for contrast against deep bg */}
-            <div className="bg-[#1a2e05]/30 backdrop-blur-sm p-2 rounded-[32px] shadow-2xl max-w-3xl mx-auto flex flex-col md:flex-row items-center gap-2 relative z-10 hover:bg-[#1a2e05]/40 transition-all duration-300 border border-white/5">
+            {/* Input Container - Unified White Box */}
+            <div className="max-w-3xl mx-auto bg-white rounded-[26px] p-2 pl-4 flex flex-col md:flex-row items-center gap-2 shadow-lg relative z-10">
               
-              {/* Upload Box - White Background - Takes up most space */}
+              {/* Upload Input Area - Left side */}
               <div 
                 onClick={triggerFileInput}
-                className="flex-1 w-full flex items-center gap-4 px-6 py-4 cursor-pointer bg-white hover:bg-gray-50 rounded-[26px] transition-all group relative z-10"
+                className="flex-1 w-full flex items-center gap-4 py-3 cursor-pointer hover:bg-gray-50 rounded-[20px] transition-colors group"
               >
                 {/* Icon Circle - Light Green */}
-                <div className="bg-[#f0fdf4] p-3 rounded-full text-[#65a30d] border border-[#dcfce7] group-hover:scale-105 transition-transform duration-300">
+                <div className="bg-[#f0fdf4] p-3 rounded-full text-[#65a30d] border border-[#dcfce7] group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
                   <Upload size={20} />
                 </div>
                 
@@ -217,40 +217,38 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
                 />
               </div>
 
-              {/* Camera Button */}
-              <button 
-                onClick={startCamera}
-                disabled={isAnalyzing}
-                className="w-full md:w-auto p-5 rounded-[26px] bg-white/10 hover:bg-white/20 text-white border border-white/10 backdrop-blur-sm transition-all relative z-10 flex items-center justify-center group flex-shrink-0"
-                title="Take a Selfie"
-              >
-                <Camera size={24} className="group-hover:scale-110 transition-transform" />
-              </button>
+              {/* Action Buttons - Right side inside the white box */}
+              <div className="flex items-center gap-2 w-full md:w-auto p-1 flex-shrink-0">
+                {/* Scan Button - Rectangular - Now First/Front */}
+                <button 
+                    onClick={handleScan}
+                    disabled={isAnalyzing || !selectedFile}
+                    className="h-14 px-8 rounded-[20px] font-bold flex items-center justify-center gap-2 transition-all transform active:scale-95 text-lg whitespace-nowrap shadow-md bg-[#3f6212] hover:bg-[#365314] text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                >
+                    {isAnalyzing ? (
+                    <>
+                        <Loader2 className="animate-spin w-5 h-5" /> 
+                        Analyzing...
+                    </>
+                    ) : (
+                    <>
+                        <ScanLine className="w-5 h-5" /> 
+                        Scan
+                    </>
+                    )}
+                </button>
 
-              {/* Scan Button - Solid Green to be "More Obvious" */}
-              <button 
-                onClick={handleScan}
-                disabled={isAnalyzing || !selectedFile}
-                className={`w-full md:w-auto px-10 py-5 rounded-[26px] font-bold flex items-center justify-center gap-2 transition-all transform active:scale-95 text-lg whitespace-nowrap relative z-10
-                  ${!selectedFile
-                    ? 'bg-white/5 text-white/40 cursor-not-allowed border border-white/5'
-                    : isAnalyzing
-                      ? 'bg-white/20 text-white cursor-wait border border-white/10'
-                      : 'bg-[#65a30d] hover:bg-[#5a8d13] text-white border border-[#84cc16]/30 shadow-lg shadow-[#65a30d]/40'
-                  }`}
-              >
-                {isAnalyzing ? (
-                  <>
-                    <Loader2 className="animate-spin w-5 h-5" /> 
-                    Analyzing...
-                  </>
-                ) : (
-                  <>
-                    <ScanLine className="w-5 h-5" /> 
-                    Scan
-                  </>
-                )}
-              </button>
+                {/* Camera Button - Square - Now Second/Back */}
+                <button 
+                    onClick={startCamera}
+                    disabled={isAnalyzing}
+                    className="w-14 h-14 rounded-[20px] bg-[#3f6212] hover:bg-[#365314] text-white shadow-md transition-all flex items-center justify-center group flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Take a Selfie"
+                >
+                    <Camera size={24} className="group-hover:scale-110 transition-transform" />
+                </button>
+              </div>
+
             </div>
           </>
         )}
