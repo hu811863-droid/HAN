@@ -1,35 +1,12 @@
 import React, { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const FAQ: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const { t } = useLanguage();
 
-  const faqs = [
-    {
-      question: 'How exactly does the AI determine my eye shape?',
-      answer: "Our smart AI scans your photo for specific facial landmarks—like the visibility of your crease, the angle of your outer corners, and the amount of iris visible. It compares these measurements against expert definitions to pinpoint your unique shape instantly."
-    },
-    {
-      question: 'What are the main eye shape categories?',
-      answer: "We analyze for the major architectural types: Almond, Round, Monolid, Hooded, Upturned, Downturned, Wide-set, Close-set, and Deep-set. Keep in mind, many people are a beautiful blend of these traits (e.g., 'Hooded Almond')!"
-    },
-    {
-      question: 'What is the difference between Hooded and Monolid eyes?',
-      answer: "It comes down to the crease! Hooded eyes have a visible crease that is tucked away under a fold of skin when looking straight ahead. Monolid eyes typically have a flat, smooth lid with no visible crease line. Both offer unique canvases for stunning makeup looks."
-    },
-    {
-      question: 'Why does shape matter for my makeup routine?',
-      answer: "Geometry is the secret to professional-looking makeup. Knowing your shape tells you exactly where to place your wing to 'lift' your face, or where to apply shadow to create depth. It stops you from fighting your features and starts helping you enhance them."
-    },
-    {
-      question: 'Can this result help me choose the perfect glasses?',
-      answer: "100%. Frame shopping becomes effortless when you know the rule of opposites. Round eyes often look best in angular, geometric frames, while sharper shapes shine in softer, curved glasses. Your result gives you the blueprint to balance your overall look."
-    },
-    {
-      question: 'Is my eye shape permanent?',
-      answer: "Mostly, yes—it's part of your DNA! However, time plays a role. As we age, skin elasticity changes, often making eyes appear more hooded or downturned over time. Re-checking your shape every few years ensures your styling strategy evolves with you."
-    }
-  ];
+  const faqs = t.faqSection.items;
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -38,7 +15,7 @@ const FAQ: React.FC = () => {
   return (
     <section id="faq" className="py-20 px-4 max-w-5xl mx-auto">
       <h2 className="text-3xl md:text-5xl font-bold text-[#333333] text-center mb-16 tracking-tight">
-        Frequently Asked Questions
+        {t.faqSection.title}
       </h2>
 
       <div className="space-y-4">

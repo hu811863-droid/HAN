@@ -1,6 +1,7 @@
 import React from 'react';
 import { EyeAnalysisResult } from '../types';
 import { Sparkles, CheckCircle2, Star, RefreshCw, Info, Glasses } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface ResultCardProps {
   result: EyeAnalysisResult;
@@ -10,6 +11,10 @@ interface ResultCardProps {
 
 const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) => {
   const percentage = (result.confidence * 100).toFixed(1);
+  const { t } = useLanguage();
+
+  // Get translated shape name or fallback to original
+  const translatedShape = t.shapeNames[result.shape as keyof typeof t.shapeNames] || result.shape;
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 mt-8 mb-20 animate-fade-in">
@@ -30,30 +35,30 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) =
                          ) : (
                             <div className="w-full h-full flex items-center justify-center text-gray-300 bg-gray-50 flex-col gap-2">
                                 <Sparkles size={48} className="opacity-50" />
-                                <span className="text-xs font-medium text-gray-400">Image not saved</span>
+                                <span className="text-xs font-medium text-gray-400">{t.results.noImage}</span>
                             </div>
                          )}
-                         {/* Optional Badge - Green */}
+                         {/* Badge - Top Right */}
                          <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md text-[#65a30d] px-2.5 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1">
                             <Sparkles size={10} />
-                            {percentage}% Match
+                            {percentage}% {t.results.match}
                          </div>
                     </div>
 
-                    {/* Result Header */}
-                    <div className="mb-2 w-full">
-                        <div className="inline-block px-3 py-1 rounded-full bg-[#65a30d]/10 text-[#65a30d] text-xs font-bold tracking-wider uppercase mb-3">
-                            Analysis Result
+                    {/* Result Header - Centered Layout */}
+                    <div className="w-full flex flex-col items-center mb-6">
+                        <div className="inline-block px-3 py-1 rounded-full bg-[#65a30d]/10 text-[#65a30d] text-xs font-bold tracking-wider uppercase mb-2">
+                            {t.results.analysisResult}
                         </div>
-                        <h2 className="text-2xl font-extrabold text-[#333333] leading-tight mb-4">
-                            {result.shape} Eyes
+                        <h2 className="text-3xl font-extrabold text-[#333333] leading-tight">
+                            {translatedShape}
                         </h2>
                     </div>
 
                     {/* Progress Bar Section - Green Gradient */}
                     <div className="w-full mb-6 px-1">
                         <div className="flex justify-between items-center mb-2">
-                            <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">Confidence</span>
+                            <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">{t.results.confidence}</span>
                             <span className="text-sm font-bold text-[#65a30d]">{percentage}%</span>
                         </div>
                         <div className="w-full bg-gray-100 rounded-full h-2">
@@ -72,7 +77,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) =
                             className="w-full py-3.5 px-6 bg-[#65a30d] hover:bg-[#4d7c0f] text-white rounded-[16px] font-semibold text-base shadow-lg shadow-[#65a30d]/25 transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2"
                         >
                             <RefreshCw size={18} />
-                            Scan Another
+                            {t.results.scanAnother}
                         </button>
                     </div>
 
@@ -88,7 +93,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) =
                         <div className="w-10 h-10 bg-[#65a30d]/10 rounded-[12px] flex items-center justify-center text-[#65a30d]">
                             <Info size={22} />
                         </div>
-                        <h3 className="text-xl font-bold text-[#333333]">Why This Shape?</h3>
+                        <h3 className="text-xl font-bold text-[#333333]">{t.results.why}</h3>
                      </div>
                      <p className="text-[#555555] text-lg leading-relaxed">
                         {result.description}
@@ -101,7 +106,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) =
                         <div className="w-10 h-10 bg-[#65a30d]/10 rounded-[12px] flex items-center justify-center text-[#65a30d]">
                             <CheckCircle2 size={22} />
                         </div>
-                        <h3 className="text-xl font-bold text-[#333333]">Key Features</h3>
+                        <h3 className="text-xl font-bold text-[#333333]">{t.results.features}</h3>
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
                         {result.features.map((feature, idx) => (
@@ -119,7 +124,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) =
                         <div className="w-10 h-10 bg-[#65a30d]/10 rounded-[12px] flex items-center justify-center text-[#65a30d]">
                             <Glasses size={22} />
                         </div>
-                        <h3 className="text-xl font-bold text-[#333333]">Recommended Frames</h3>
+                        <h3 className="text-xl font-bold text-[#333333]">{t.results.frames}</h3>
                     </div>
                     <div className="grid sm:grid-cols-3 gap-4">
                         {result.eyewearRecommendations?.map((rec, idx) => (
@@ -142,7 +147,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, userImage, onReset }) =
                             <div className="w-10 h-10 bg-white/20 rounded-[12px] backdrop-blur-sm flex items-center justify-center">
                                 <Star size={22} className="fill-white text-white" />
                             </div>
-                            <h3 className="text-xl font-bold">Styling Strategy</h3>
+                            <h3 className="text-xl font-bold">{t.results.styling}</h3>
                         </div>
                         <div className="space-y-6">
                             {result.makeupTips.map((tip, idx) => (

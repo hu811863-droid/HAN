@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Upload, ScanLine, Loader2, AlertCircle, Trash2, RefreshCw, ShieldCheck, Camera, X } from 'lucide-react';
 import { analyzeEyeShape } from '../services/geminiService';
 import { EyeAnalysisResult } from '../types';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface HeroProps {
   onAnalysisComplete: (result: EyeAnalysisResult | null, image?: string | null) => void;
@@ -13,6 +14,7 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const { t, language } = useLanguage();
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -37,7 +39,7 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
     const file = event.target.files?.[0];
     if (file) {
       if (!file.type.startsWith('image/')) {
-        setError("Please upload a valid image file.");
+        setError(t.hero.error);
         return;
       }
       setSelectedFile(file);
@@ -59,7 +61,7 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
 
   const handleScan = async () => {
     if (!selectedFile) {
-      setError("Please select an image first.");
+      setError(t.hero.error);
       return;
     }
 
@@ -67,11 +69,12 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
     setError(null);
 
     try {
-      const result = await analyzeEyeShape(selectedFile);
+      // Pass the current language to the service
+      const result = await analyzeEyeShape(selectedFile, language);
       // Pass both the result and the current preview URL
       onAnalysisComplete(result, previewUrl);
     } catch (err) {
-      setError("Failed to analyze image. Please try again with a clearer photo.");
+      setError(t.hero.error);
       console.error(err);
     } finally {
       setIsAnalyzing(false);
@@ -173,19 +176,19 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
                  <div className="h-12 w-12 rounded-full bg-[#65a30d]" />
                </button>
              </div>
-             <p className="mt-4 text-white/80 font-medium text-sm">Make sure your eyes are clearly visible</p>
+             <p className="mt-4 text-white/80 font-medium text-sm">{t.hero.cameraTip}</p>
           </div>
         ) : (
           /* Standard Upload UI */
           <>
             {/* Title: Keyword Rich for SEO */}
             <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-sm relative z-10 tracking-tight leading-tight">
-              AI Eye Shape Finder
-              <span className="block text-2xl md:text-4xl mt-2 font-bold text-white/90">What Is My Eye Shape?</span>
+              {t.hero.title}
+              <span className="block text-2xl md:text-4xl mt-2 font-bold text-white/90">{t.hero.subtitle}</span>
             </h1>
             {/* Subtitle: Value Prop - Concise & Direct */}
             <p className="text-white/90 text-lg md:text-xl mb-10 max-w-2xl mx-auto relative z-10 font-medium leading-relaxed">
-              Instantly identify your eye shape with AI. Get personalized makeup tips & eyewear recommendations.
+              {t.hero.desc}
             </p>
 
             {/* Input Container - Unified White Box */}
@@ -203,10 +206,10 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
                 
                 <div className="flex flex-col items-start overflow-hidden">
                   <span className="font-bold truncate w-full text-left text-lg text-[#333333]">
-                    {selectedFile ? selectedFile.name : "Upload photo..."}
+                    {selectedFile ? selectedFile.name : t.hero.upload}
                   </span>
                   <span className="text-sm text-gray-400 font-medium">
-                    {selectedFile ? "Ready to analyze" : "JPG, PNG supported"}
+                    {selectedFile ? t.hero.ready : "JPG, PNG supported"}
                   </span>
                 </div>
                 <input 
@@ -229,12 +232,12 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
                     {isAnalyzing ? (
                     <>
                         <Loader2 className="animate-spin w-5 h-5" /> 
-                        Analyzing...
+                        {t.hero.analyzing}
                     </>
                     ) : (
                     <>
                         <ScanLine className="w-5 h-5" /> 
-                        Analyze
+                        {t.hero.analyze}
                     </>
                     )}
                 </button>
@@ -258,7 +261,7 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
         {!isCameraOpen && (
           <div className="mt-6 flex items-center justify-center gap-2 text-white/70 text-sm font-medium relative z-10 animate-fade-in">
             <ShieldCheck size={16} />
-            <span>100% Private. Photos are never stored.</span>
+            <span>{t.hero.privacy}</span>
           </div>
         )}
 
@@ -280,7 +283,7 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
                     className="flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-gray-50 text-[#333333] text-sm font-semibold rounded-full shadow-sm border border-gray-200 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <RefreshCw size={14} />
-                    Change Photo
+                    {t.hero.change}
                 </button>
                 <button
                     onClick={clearSelection}
@@ -288,7 +291,7 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
                     className="flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-red-50 text-red-500 text-sm font-semibold rounded-full shadow-sm border border-red-100 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <Trash2 size={14} />
-                    Remove
+                    {t.hero.remove}
                 </button>
             </div>
           </div>
@@ -309,7 +312,7 @@ const Hero: React.FC<HeroProps> = ({ onAnalysisComplete }) => {
                  className="flex items-center gap-2 px-6 py-3 bg-white text-[#65a30d] rounded-[12px] font-medium text-sm hover:bg-gray-50 shadow-md transition-all transform active:scale-95 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
                >
                  <RefreshCw size={18} />
-                 Try Again
+                 {t.hero.tryAgain}
                </button>
             )}
           </div>

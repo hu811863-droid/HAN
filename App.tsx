@@ -4,13 +4,15 @@ import Home from './components/Home';
 import ResultCard from './components/ResultCard';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import { EyeAnalysisResult } from './types';
+import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 type ViewState = 'home' | 'result' | 'privacy';
 
-function App() {
+function AppContent() {
   const [analysisResult, setAnalysisResult] = useState<EyeAnalysisResult | null>(null);
   const [userImage, setUserImage] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<ViewState>('home');
+  const { t } = useLanguage();
 
   // Handle Shared Results on Mount
   useEffect(() => {
@@ -118,17 +120,15 @@ function App() {
               EyeShapeAI
             </div>
             <span className="hidden md:inline text-gray-300">|</span>
-            <p className="text-[#555555]">© {new Date().getFullYear()} All rights reserved.</p>
+            <p className="text-[#555555]">© {new Date().getFullYear()} {t.footer.rights}</p>
           </div>
 
           {/* Right: Links & Contact Horizontal */}
           <div className="flex flex-wrap justify-center gap-6 font-medium">
-            <button onClick={() => handleNavigate('home')} className="hover:text-[#65a30d] transition-colors">Home</button>
-            <button onClick={() => handleNavigate('home', 'shapes')} className="hover:text-[#65a30d] transition-colors">Eye Shapes</button>
-            <button onClick={() => handleNavigate('home', 'faq')} className="hover:text-[#65a30d] transition-colors">FAQ</button>
-            <button onClick={() => handleNavigate('privacy')} className="hover:text-[#65a30d] transition-colors">Privacy Policy</button>
-            <span className="text-gray-300 hidden sm:inline">|</span>
-            <a href="mailto:support@eyeshapeai.com" className="hover:text-[#65a30d] transition-colors">support@eyeshapeai.com</a>
+            <button onClick={() => handleNavigate('home')} className="hover:text-[#65a30d] transition-colors">{t.footer.links.home}</button>
+            <button onClick={() => handleNavigate('home', 'shapes')} className="hover:text-[#65a30d] transition-colors">{t.footer.links.shapes}</button>
+            <button onClick={() => handleNavigate('home', 'faq')} className="hover:text-[#65a30d] transition-colors">{t.footer.links.faq}</button>
+            <button onClick={() => handleNavigate('privacy')} className="hover:text-[#65a30d] transition-colors">{t.footer.links.privacy}</button>
           </div>
 
         </div>
@@ -137,4 +137,10 @@ function App() {
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
+  );
+}

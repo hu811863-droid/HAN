@@ -1,22 +1,25 @@
 import React from 'react';
 import { Palette, Glasses, Heart, ScanFace } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const InfoSections: React.FC = () => {
+  const { t } = useLanguage();
+
   const features = [
     {
       icon: <Palette className="w-8 h-8 text-[#65a30d]" />,
-      title: "Master Your Makeup",
-      description: "Learn the exact angles and techniques to make your specific eye shape pop."
+      title: t.info.features.makeup.title,
+      description: t.info.features.makeup.desc
     },
     {
       icon: <Glasses className="w-8 h-8 text-[#65a30d]" />,
-      title: "Find Your Frames",
-      description: "Discover glasses that balance your brow bone and highlight your best features."
+      title: t.info.features.frames.title,
+      description: t.info.features.frames.desc
     },
     {
       icon: <Heart className="w-8 h-8 text-[#65a30d]" />,
-      title: "Boost Confidence",
-      description: "Embrace your unique look with architectural styling tips designed just for you."
+      title: t.info.features.confidence.title,
+      description: t.info.features.confidence.desc
     }
   ];
 
@@ -30,17 +33,17 @@ const InfoSections: React.FC = () => {
       <section className="py-24 px-4 bg-white border-t border-gray-100">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <h2 className="text-4xl md:text-5xl font-bold text-[#333333] tracking-tight">
-            Ready To Find Your Eye Shape?
+            {t.info.ctaTitle}
           </h2>
           <p className="text-xl text-[#555555] leading-relaxed max-w-2xl mx-auto">
-             Stop guessing. Instantly identify your eye shape in seconds with AI.
+             {t.info.ctaDesc}
           </p>
           <button 
             onClick={scrollToTop}
             className="bg-[#65a30d] hover:bg-[#4d7c0f] text-white text-lg font-semibold px-10 py-4 rounded-[8px] shadow-lg shadow-[#65a30d]/30 transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2 mx-auto"
           >
             <ScanFace className="w-5 h-5" />
-            Reveal My Shape
+            {t.info.ctaButton}
           </button>
         </div>
       </section>
@@ -49,10 +52,10 @@ const InfoSections: React.FC = () => {
       <section className="py-24 px-4 max-w-7xl mx-auto bg-[#f9f9f9]">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-[#333333] mb-4">
-            Why It Matters
+            {t.info.whyMatters}
           </h2>
           <p className="text-[#555555] max-w-xl mx-auto">
-            Your eye shape is the blueprint for your style. Unlock personalized makeup and eyewear potential.
+            {t.info.whyDesc}
           </p>
         </div>
 

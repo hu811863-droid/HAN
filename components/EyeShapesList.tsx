@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Custom SVG components to mimic the vector illustrations
 // Theme: Avocado Green Style (#65a30d)
@@ -163,92 +164,62 @@ const EyeIllustration = ({ type }: { type: string }) => {
 };
 
 const EyeShapesList: React.FC = () => {
-  const shapes = [
-    {
-      name: 'Almond',
-      description: 'The versatile shape. Oval with slightly pointed ends.',
-      match: 'Balanced & Classic'
-    },
-    {
-      name: 'Round',
-      description: 'Large and open. Whites clearly visible around the iris.',
-      match: 'Bright & Youthful'
-    },
-    {
-      name: 'Upturned',
-      description: 'Outer corners lift higher than inner corners.',
-      match: 'Feline & Lifted'
-    },
-    {
-      name: 'Downturned',
-      description: 'Outer corners dip slightly lower than inner corners.',
-      match: 'Soulful & Vintage'
-    },
-    {
-      name: 'Wide-set',
-      description: 'Distance between eyes is greater than one eye width.',
-      match: 'Exotic & Broad'
-    },
-    {
-      name: 'Close-set',
-      description: 'Distance between eyes is less than one eye width.',
-      match: 'Intense & Focused'
-    },
-    {
-      name: 'Monolid',
-      description: 'Smooth surface with no visible crease on the lid.',
-      match: 'Sleek & Modern'
-    },
-    {
-      name: 'Hooded',
-      description: 'A skin fold obscures the crease, making the lid look smaller.',
-      match: 'Deep & Mysterious'
-    },
-    {
-      name: 'Deep-set',
-      description: 'Set deeper into the skull, creating a prominent brow bone.',
-      match: 'Defined & Strong'
-    }
+  const { t } = useLanguage();
+
+  // Keys to iterate over the shape items
+  const shapeKeys = [
+    'Almond', 'Round', 'Upturned', 'Downturned', 
+    'Wide-set', 'Close-set', 'Monolid', 'Hooded', 'Deep-set'
   ];
 
   return (
     <section id="shapes" className="py-20 px-4 max-w-7xl mx-auto">
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-5xl font-bold text-[#333333] tracking-tight mb-4">
-          Eye Shape Library: Which One Am I?
+          {t.shapesList.title}
         </h2>
         <p className="text-[#555555] text-lg max-w-2xl mx-auto">
-          Explore the traits that define different eye shapes. Find your unique look.
+          {t.shapesList.subtitle}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {shapes.map((shape) => (
-          <div 
-            key={shape.name} 
-            className="group bg-white rounded-[20px] p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:shadow-[#65a30d]/10 hover:border-[#65a30d]/30 transition-all duration-300 transform hover:-translate-y-1"
-          >
-            {/* SVG Illustration Container */}
-            <div className="h-28 w-full bg-[#f9f9f9] rounded-[16px] mb-6 flex items-center justify-center overflow-hidden border border-gray-50 group-hover:bg-white transition-colors">
-              <div className="w-56 h-full opacity-70 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                 <EyeIllustration type={shape.name} />
-              </div>
-            </div>
+        {shapeKeys.map((key) => {
+          const shapeData = t.shapesList.items[key];
+          // Fallback if translation is missing (though it shouldn't be with the setup)
+          if (!shapeData) return null;
 
-            {/* Text Content */}
-            <div className="text-center">
-              <div className="inline-block px-3 py-1 bg-[#65a30d]/10 text-[#65a30d] text-xs font-bold rounded-full mb-3 uppercase tracking-wide">
-                {shape.match}
+          // Get the translated name for display (e.g. "Almond Eyes" -> "Almond" part translated)
+          // We use the shapeNames map for the title part
+          const displayName = t.shapeNames[key as keyof typeof t.shapeNames] || key;
+
+          return (
+            <div 
+              key={key} 
+              className="group bg-white rounded-[20px] p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:shadow-[#65a30d]/10 hover:border-[#65a30d]/30 transition-all duration-300 transform hover:-translate-y-1"
+            >
+              {/* SVG Illustration Container */}
+              <div className="h-28 w-full bg-[#f9f9f9] rounded-[16px] mb-6 flex items-center justify-center overflow-hidden border border-gray-50 group-hover:bg-white transition-colors">
+                <div className="w-56 h-full opacity-70 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                   <EyeIllustration type={key} />
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-[#333333] mb-2">
-                {shape.name} Eyes
-              </h3>
-              <p className="text-[#555555] text-sm leading-relaxed">
-                {shape.description}
-              </p>
+
+              {/* Text Content */}
+              <div className="text-center">
+                <div className="inline-block px-3 py-1 bg-[#65a30d]/10 text-[#65a30d] text-xs font-bold rounded-full mb-3 uppercase tracking-wide">
+                  {shapeData.match}
+                </div>
+                <h3 className="text-xl font-bold text-[#333333] mb-2">
+                  {displayName}
+                </h3>
+                <p className="text-[#555555] text-sm leading-relaxed">
+                  {shapeData.description}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

@@ -4,8 +4,7 @@ import { EyeAnalysisResult } from "../types";
 const apiKey = process.env.API_KEY || '';
 const ai = new GoogleGenAI({ apiKey });
 
-// Static data for low-latency, zero-token recommendations
-// This ensures consistent, high-quality advice without consuming AI tokens.
+// Static data for low-latency, zero-token recommendations (English Only)
 const SHAPE_GUIDES: Record<string, { makeupTips: string[], eyewearRecommendations: string[] }> = {
   "Almond": {
     makeupTips: [
@@ -129,7 +128,6 @@ const fileToBase64 = (file: File): Promise<string> => {
     reader.readAsDataURL(file);
     reader.onload = () => {
       const result = reader.result as string;
-      // Remove the Data URL prefix (e.g., "data:image/jpeg;base64,")
       const base64Data = result.split(',')[1];
       resolve(base64Data);
     };
@@ -137,37 +135,55 @@ const fileToBase64 = (file: File): Promise<string> => {
   });
 };
 
-export const analyzeEyeShape = async (imageFile: File): Promise<EyeAnalysisResult> => {
+export const analyzeEyeShape = async (imageFile: File, language: string = 'en'): Promise<EyeAnalysisResult> => {
   try {
     const base64Image = await fileToBase64(imageFile);
+    
+    // Logic: 
+    // If English: Use lightweight schema (only shape/features) + Static English Guides. Saves tokens.
+    // If Foreign: Ask AI to generate TIPS in that language too (bypassing static English guides).
 
-    // Optimized schema: Only ask for dynamic analysis data.
-    // We offload static advice to client-side maps to save tokens and time.
-    const schema: Schema = {
-      type: Type.OBJECT,
-      properties: {
-        shape: {
-          type: Type.STRING,
-          description: "One of: Almond, Round, Monolid, Hooded, Downturned, Upturned, Wide-set, Close-set, Deep-set.",
+    const isEnglish = language === 'en';
+
+    let schema: Schema;
+    
+    if (isEnglish) {
+       schema = {
+        type: Type.OBJECT,
+        properties: {
+          shape: { type: Type.STRING, description: "One of: Almond, Round, Monolid, Hooded, Downturned, Upturned, Wide-set, Close-set, Deep-set." },
+          confidence: { type: Type.NUMBER, description: "0 to 1." },
+          description: { type: Type.STRING, description: "Brief explanation of visible landmarks." },
+          features: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Key visual traits (max 3)." },
         },
-        confidence: {
-          type: Type.NUMBER,
-          description: "0 to 1.",
+        required: ["shape", "description", "features", "confidence"],
+      };
+    } else {
+       // Full schema for foreign languages
+       schema = {
+        type: Type.OBJECT,
+        properties: {
+          shape: { type: Type.STRING, description: "One of: Almond, Round, Monolid, Hooded, Downturned, Upturned, Wide-set, Close-set, Deep-set." },
+          confidence: { type: Type.NUMBER, description: "0 to 1." },
+          description: { type: Type.STRING, description: "Brief explanation of visible landmarks in the requested language." },
+          features: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Key visual traits in the requested language (max 3)." },
+          makeupTips: { type: Type.ARRAY, items: { type: Type.STRING }, description: "3 Specific makeup tips in the requested language." },
+          eyewearRecommendations: { type: Type.ARRAY, items: { type: Type.STRING }, description: "3 Specific eyewear frame recommendations in the requested language." }
         },
-        description: {
-          type: Type.STRING,
-          description: "Brief explanation of visible landmarks (e.g. 'Outer corner is higher than inner corner').",
-        },
-        features: {
-          type: Type.ARRAY,
-          items: { type: Type.STRING },
-          description: "Key visual traits (max 3).",
-        },
-      },
-      required: ["shape", "description", "features", "confidence"],
+        required: ["shape", "description", "features", "confidence", "makeupTips", "eyewearRecommendations"],
+      };
+    }
+
+    const languagePrompt = {
+      'en': 'Respond in English.',
+      'hi': 'Respond in Hindi (Devanagari script).',
+      'th': 'Respond in Thai.',
+      'zh': 'Respond in Simplified Chinese.',
+      'vi': 'Respond in Vietnamese.'
     };
+    
+    const langInstruction = languagePrompt[language as keyof typeof languagePrompt] || 'Respond in English.';
 
-    // Using gemini-2.5-flash for maximum speed and efficiency
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: {
@@ -179,7 +195,7 @@ export const analyzeEyeShape = async (imageFile: File): Promise<EyeAnalysisResul
             },
           },
           {
-            text: "Identify the eye shape. Check horizontal axis (inner vs outer corner height) for Upturned/Downturned. Check crease visibility for Monolid/Hooded. Return JSON.",
+            text: `Identify the eye shape. Check horizontal axis (inner vs outer corner height) for Upturned/Downturned. Check crease visibility for Monolid/Hooded. ${langInstruction} Return JSON.`,
           },
         ],
       },
@@ -193,14 +209,19 @@ export const analyzeEyeShape = async (imageFile: File): Promise<EyeAnalysisResul
     if (response.text) {
       const aiResult = JSON.parse(response.text);
       
-      // Merge AI analysis with static expert guides
-      const guide = SHAPE_GUIDES[aiResult.shape] || DEFAULT_GUIDE;
-      
-      return {
-        ...aiResult,
-        makeupTips: guide.makeupTips,
-        eyewearRecommendations: guide.eyewearRecommendations
-      } as EyeAnalysisResult;
+      if (isEnglish) {
+        // Merge AI analysis with static expert guides (English)
+        const guide = SHAPE_GUIDES[aiResult.shape] || DEFAULT_GUIDE;
+        return {
+          ...aiResult,
+          makeupTips: guide.makeupTips,
+          eyewearRecommendations: guide.eyewearRecommendations
+        } as EyeAnalysisResult;
+      } else {
+        // Use AI generated tips directly (Foreign Language)
+        return aiResult as EyeAnalysisResult;
+      }
+
     } else {
       throw new Error("No analysis result returned from the model.");
     }
