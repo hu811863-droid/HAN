@@ -1,0 +1,7 @@
+{
+  "name": "Eye-Shape-AI",
+  "description": "Instantly identify my eye shape with AI. Get personalized makeup and eyewear tips for Almond, Round, Hooded eyes, and more.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
